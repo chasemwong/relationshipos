@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RelationshipOS</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--brand:#1F4E5C;--brand-h:#163B47;--brand-f:#E6F1F4;--brand-w:#fff}
+body{display:flex;height:100vh;overflow:hidden;font-family:var(--font-sans,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif);background:var(--surface-0,#f5f5f3);color:var(--text-primary,#1a1a18);font-size:14px;line-height:1.5}
+
+/* Sidebar */
+.sb{width:216px;background:var(--brand);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sb-logo{padding:18px 16px 14px;border-bottom:0.5px solid rgba(255,255,255,.12)}
+.sb-logo-name{font-size:14px;font-weight:500;color:#fff;letter-spacing:.2px}
+.sb-logo-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:2px}
+.sb-nav{flex:1;padding:10px 0}
+.nav-i{display:flex;align-items:center;gap:9px;padding:9px 16px;color:rgba(255,255,255,.6);cursor:pointer;font-size:13px;border-left:2px solid transparent;transition:all .12s;user-select:none}
+.nav-i:hover{color:#fff;background:rgba(255,255,255,.07)}
+.nav-i.on{color:#fff;background:rgba(255,255,255,.1);border-left-color:rgba(255,255,255,.7)}
+.nav-i i{font-size:16px;width:18px}
+.sb-foot{padding:12px 16px;border-top:0.5px solid rgba(255,255,255,.12)}
+.sb-stat{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.4);margin-bottom:4px}
+.sb-stat span:last-child{color:rgba(255,255,255,.7);font-weight:500}
+
+/* Main */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-width:0}
+.topbar{padding:13px 22px;background:var(--surface-2,#fff);border-bottom:0.5px solid var(--border,rgba(0,0,0,.1));display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.topbar h1{font-size:16px;font-weight:500}
+.topbar p{font-size:12px;color:var(--text-secondary,#666);margin-top:1px}
+.topbar-r{display:flex;gap:8px;align-items:center}
+.content{padding:20px 22px;flex:1}
+
+/* Buttons */
+button{cursor:pointer;font-family:inherit;font-size:13px;transition:all .12s}
+.btn{padding:7px 14px;border-radius:8px;border:0.5px solid var(--border-strong,rgba(0,0,0,.15));background:var(--surface-2,#fff);color:var(--text-primary);display:inline-flex;align-items:center;gap:6px}
+.btn:hover{background:var(--surface-1,#f8f8f7)}
+.btn-p{background:var(--brand);color:#fff;border-color:var(--brand)}
+.btn-p:hover{background:var(--brand-h)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-icon{background:none;border:none;color:var(--text-secondary,#666);padding:5px;border-radius:6px;display:inline-flex;align-items:center}
+.btn-icon:hover{background:var(--surface-1);color:var(--text-primary)}
+.btn-d{background:var(--bg-danger,#fef2f2);color:var(--text-danger,#b91c1c);border-color:var(--border-danger,rgba(185,28,28,.2))}
+.btn-d:hover{background:var(--fill-danger,#dc2626);color:#fff;border-color:var(--fill-danger)}
+.btn-gh{background:none;border:0.5px solid var(--border);color:var(--text-secondary);padding:5px 10px;border-radius:8px}
+.btn-gh:hover{background:var(--surface-1);color:var(--text-primary)}
+
+/* Cards */
+.card{background:var(--surface-2,#fff);border-radius:12px;border:0.5px solid var(--border);padding:18px;margin-bottom:14px}
+.card-t{font-size:11px;font-weight:500;color:var(--text-muted,#999);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px}
+
+/* Stats */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat-c{background:var(--surface-2,#fff);border:0.5px solid var(--border);border-radius:12px;padding:14px 16px}
+.stat-n{font-size:26px;font-weight:500;color:var(--brand);line-height:1}
+.stat-l{font-size:12px;color:var(--text-secondary);margin-top:4px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* Tier badges */
+.t-badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:500}
+.t1{background:var(--bg-success,#f0fdf4);color:var(--text-success,#15803d)}
+.t2{background:var(--bg-accent,#eff6ff);color:var(--text-accent,#1d4ed8)}
+.t3{background:var(--surface-1,#f8f8f7);color:var(--text-muted,#999)}
+
+/* Avatar */
+.av{border-radius:10px;background:var(--brand-f);color:var(--brand);display:flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0}
+
+/* Contact grid */
+.search-row{display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.s-input{flex:1;min-width:180px;padding:8px 12px;border:0.5px solid var(--border-strong);border-radius:8px;font-size:13px;background:var(--surface-2);color:var(--text-primary);outline:none;font-family:inherit}
+.s-input:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(31,78,92,.1)}
+.f-chip{padding:5px 11px;border-radius:20px;border:0.5px solid var(--border-strong);background:var(--surface-2);color:var(--text-secondary);font-size:12px;font-family:inherit}
+.f-chip.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.c-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.c-card{background:var(--surface-2);border:0.5px solid var(--border);border-radius:12px;padding:14px;cursor:pointer;transition:all .12s}
+.c-card:hover{border-color:var(--border-accent,rgba(29,78,216,.3));box-shadow:0 2px 8px rgba(31,78,92,.08);transform:translateY(-1px)}
+.c-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;gap:8px}
+.c-name{font-size:14px;font-weight:500}
+.c-role{font-size:12px;color:var(--text-secondary);margin-top:1px}
+.c-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:0.5px solid var(--border)}
+.last-s{font-size:11px;color:var(--text-muted)}
+
+/* Forms */
+.fg{margin-bottom:14px}
+.fl{display:block;font-size:11px;font-weight:500;color:var(--text-secondary);margin-bottom:5px;text-transform:uppercase;letter-spacing:.3px}
+.fc{width:100%;padding:8px 11px;border:0.5px solid var(--border-strong);border-radius:8px;font-size:13px;background:var(--surface-2);color:var(--text-primary);outline:none;font-family:inherit;transition:border-color .12s}
+.fc:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(31,78,92,.1)}
+.fc-ta{resize:vertical;min-height:70px}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Tier selector */
+.tier-sel{display:flex;gap:7px}
+.t-opt{flex:1;padding:8px;border:0.5px solid var(--border-strong);border-radius:8px;text-align:center;cursor:pointer;font-size:12px;font-weight:500;background:var(--surface-2);color:var(--text-secondary);transition:all .12s;font-family:inherit}
+.t-opt.s1{background:var(--bg-success,#f0fdf4);color:var(--text-success,#15803d);border-color:rgba(21,128,61,.3)}
+.t-opt.s2{background:var(--bg-accent,#eff6ff);color:var(--text-accent,#1d4ed8);border-color:rgba(29,78,216,.3)}
+.t-opt.s3{background:var(--surface-1);color:var(--text-secondary);border-color:var(--border-stronger)}
+
+/* Modal */
+.m-ov{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:flex-start;justify-content:center;padding:50px 16px 40px;z-index:50;overflow-y:auto}
+.modal{background:var(--surface-2,#fff);border-radius:14px;border:0.5px solid var(--border);padding:24px;width:100%;max-width:520px}
+.m-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.m-title{font-size:16px;font-weight:500}
+.m-ft{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+
+/* Contact detail */
+.d-hd{background:var(--surface-2);border:0.5px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px;display:flex;align-items:flex-start;gap:14px}
+.d-name{font-size:20px;font-weight:500}
+.d-sub{font-size:13px;color:var(--text-secondary);margin-top:2px}
+.d-acts{margin-left:auto;display:flex;gap:6px}
+
+/* Tabs */
+.tabs{display:flex;border-bottom:0.5px solid var(--border);margin-bottom:18px}
+.tab{padding:9px 14px;font-size:13px;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .12s}
+.tab:hover{color:var(--text-primary)}
+.tab.on{color:var(--brand);border-bottom-color:var(--brand);font-weight:500}
+
+/* Timeline */
+.tl-item{display:flex;gap:11px;margin-bottom:13px}
+.tl-icon{width:30px;height:30px;border-radius:50%;background:var(--brand-f);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px}
+.tl-body{flex:1;background:var(--surface-2);border:0.5px solid var(--border);border-radius:10px;padding:10px 14px}
+.tl-date{font-size:11px;color:var(--text-muted)}
+.tl-sum{font-size:13px;margin-top:3px;color:var(--text-primary)}
+.commit-tag{display:inline-flex;align-items:center;gap:3px;background:var(--bg-warning,#fffbeb);color:var(--text-warning,#b45309);padding:1px 7px;border-radius:10px;font-size:11px;margin-top:5px;margin-right:3px}
+
+/* Reminders */
+.rem-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:0.5px solid var(--border)}
+.rem-row:last-child{border-bottom:none}
+.rem-cb{width:18px;height:18px;border:1.5px solid var(--border-strong);border-radius:4px;background:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:10px}
+.rem-cb.done{background:var(--fill-success,#16a34a);border-color:var(--fill-success);color:#fff}
+.rem-date{font-size:11px;font-weight:500;color:var(--text-warning,#b45309)}
+.rem-date.ov{color:var(--text-danger,#b91c1c)}
+.rem-note{font-size:13px;margin-top:1px}
+
+/* Info row */
+.inf-row{display:flex;align-items:center;gap:8px;font-size:13px;padding:5px 0}
+.inf-row i{color:var(--text-muted);font-size:15px;width:16px}
+.tag{display:inline-flex;padding:2px 8px;background:var(--bg-accent,#eff6ff);color:var(--text-accent,#1d4ed8);border-radius:10px;font-size:11px;margin-right:3px;margin-top:2px}
+
+/* AI */
+.ai-wrap{display:flex;flex-direction:column;height:calc(100vh - 120px)}
+.ai-msgs{flex:1;overflow-y:auto;padding:14px;background:var(--surface-2);border:0.5px solid var(--border);border-radius:12px;margin-bottom:10px}
+.ai-m{margin-bottom:12px;display:flex}
+.ai-m.u{justify-content:flex-end}
+.ai-m.a{justify-content:flex-start}
+.ai-b{max-width:80%;padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.65}
+.ai-m.u .ai-b{background:var(--brand);color:#fff;border-radius:12px 12px 2px 12px}
+.ai-m.a .ai-b{background:var(--surface-1,#f8f8f7);color:var(--text-primary);border-radius:12px 12px 12px 2px;border:0.5px solid var(--border);white-space:pre-wrap}
+.ai-input-row{display:flex;gap:8px}
+.ai-in{flex:1;padding:10px 14px;border:0.5px solid var(--border-strong);border-radius:10px;font-size:13px;background:var(--surface-2);color:var(--text-primary);outline:none;font-family:inherit}
+.ai-in:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(31,78,92,.1)}
+.q-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.q-chip{padding:5px 11px;background:var(--brand-f);color:var(--brand);border:none;border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .12s}
+.q-chip:hover{background:var(--brand);color:#fff}
+
+/* Dashboard */
+.rc-row{display:flex;align-items:center;padding:9px 0;border-bottom:0.5px solid var(--border);gap:10px;cursor:pointer}
+.rc-row:last-child{border-bottom:none}
+.rc-row:hover .rc-name{color:var(--brand)}
+.rc-name{font-size:13px;font-weight:500;flex:1}
+.rc-sub{font-size:11px;color:var(--text-secondary)}
+.rc-days{font-size:11px;color:var(--text-danger,#b91c1c);font-weight:500}
+
+/* Misc */
+.type-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.type-btn{padding:4px 10px;border:0.5px solid var(--border-strong);border-radius:6px;font-size:12px;background:var(--surface-2);color:var(--text-secondary);font-family:inherit}
+.type-btn:hover{border-color:var(--border-stronger);color:var(--text-primary)}
+.type-btn.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.empty-s{text-align:center;padding:48px 20px;color:var(--text-muted)}
+.empty-s i{font-size:36px;display:block;margin-bottom:12px}
+.empty-s h3{font-size:16px;color:var(--text-secondary);margin-bottom:6px;font-weight:500}
+.empty-s p{font-size:13px;max-width:280px;margin:0 auto 16px}
+.back-btn{display:inline-flex;align-items:center;gap:5px;color:var(--text-secondary);font-size:13px;background:none;border:none;padding:0;cursor:pointer;font-family:inherit}
+.back-btn:hover{color:var(--brand)}
+.dots span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--text-muted);margin:0 2px;animation:db 1.2s infinite}
+.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+@keyframes db{0%,80%,100%{transform:scale(.7);opacity:.5}40%{transform:scale(1);opacity:1}}
+.spin{animation:sp 1s linear infinite;display:inline-block}@keyframes sp{to{transform:rotate(360deg)}}
+select.fc{appearance:none}
+[hidden]{display:none!important}
+.alert-info{background:var(--bg-accent,#eff6ff);color:var(--text-accent,#1d4ed8);border:0.5px solid var(--border-accent,rgba(29,78,216,.2));border-radius:8px;padding:10px 14px;font-size:12px;margin-bottom:12px}
+.alert-warn{background:var(--bg-warning,#fffbeb);color:var(--text-warning,#b45309);border:0.5px solid var(--border-warning,rgba(180,83,9,.2));border-radius:8px;padding:10px 14px;font-size:12px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">RelationshipOS — personal relationship manager</h2>
+
+<aside class="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-name">RelationshipOS</div>
+    <div class="sb-logo-sub">Personal edition</div>
+  </div>
+  <nav class="sb-nav" id="nav">
+    <div class="nav-i on" data-v="dash"><i class="ti ti-home" aria-hidden="true"></i> Dashboard</div>
+    <div class="nav-i" data-v="contacts"><i class="ti ti-users" aria-hidden="true"></i> Contacts</div>
+    <div class="nav-i" data-v="ai"><i class="ti ti-sparkles" aria-hidden="true"></i> AI assistant</div>
+  </nav>
+  <div class="sb-foot">
+    <div class="sb-stat"><span>Contacts</span><span id="s-tot">—</span></div>
+    <div class="sb-stat"><span>Inner circle</span><span id="s-t1">—</span></div>
+    <div class="sb-stat"><span>Reminders due</span><span id="s-rem">—</span></div>
+  </div>
+</aside>
+
+<main class="main" id="main"></main>
+
+<!-- Add/Edit contact modal -->
+<div id="m-contact" hidden class="m-ov">
+  <div class="modal">
+    <div class="m-hd"><span class="m-title" id="m-ct-title">Add contact</span><button class="btn-icon" onclick="closeM()"><i class="ti ti-x"></i></button></div>
+    <div class="f-row">
+      <div class="fg"><label class="fl">Name *</label><input id="f-name" class="fc" placeholder="Full name"></div>
+      <div class="fg"><label class="fl">Email</label><input id="f-email" class="fc" type="email" placeholder="email@example.com"></div>
+    </div>
+    <div class="f-row">
+      <div class="fg"><label class="fl">Company</label><input id="f-company" class="fc" placeholder="Company name"></div>
+      <div class="fg"><label class="fl">Role / title</label><input id="f-role" class="fc" placeholder="e.g. Partner at XYZ VC"></div>
+    </div>
+    <div class="f-row">
+      <div class="fg"><label class="fl">Phone</label><input id="f-phone" class="fc" placeholder="+1 (415) 000-0000"></div>
+      <div class="fg"><label class="fl">Tags (comma-separated)</label><input id="f-tags" class="fc" placeholder="VC, Singapore, healthcare"></div>
+    </div>
+    <div class="fg">
+      <label class="fl">Relationship tier</label>
+      <div class="tier-sel">
+        <button class="t-opt" data-t="1" onclick="selT(1)">🌟 Inner circle</button>
+        <button class="t-opt" data-t="2" onclick="selT(2)">👥 Active</button>
+        <button class="t-opt" data-t="3" onclick="selT(3)">📋 Dormant</button>
+      </div>
+    </div>
+    <div class="fg"><label class="fl">Notes / bio</label><textarea id="f-bio" class="fc fc-ta" placeholder="Who are they, how you met, key context..."></textarea></div>
+    <p id="m-err" style="color:var(--text-danger,#b91c1c);font-size:12px;margin-top:6px;" hidden></p>
+    <div class="m-ft">
+      <button class="btn" onclick="closeM()">Cancel</button>
+      <button class="btn btn-p" onclick="saveC()"><i class="ti ti-check"></i> Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Interaction modal -->
+<div id="m-int" hidden class="m-ov">
+  <div class="modal">
+    <div class="m-hd"><span class="m-title">Log interaction</span><button class="btn-icon" onclick="closeM()"><i class="ti ti-x"></i></button></div>
+    <div class="fg">
+      <label class="fl">Type</label>
+      <div class="type-btns">
+        <button class="type-btn on" data-it="meeting" onclick="selIT(this,'meeting')">☕ Meeting</button>
+        <button class="type-btn" data-it="call" onclick="selIT(this,'call')">📞 Call</button>
+        <button class="type-btn" data-it="email" onclick="selIT(this,'email')">✉️ Email</button>
+        <button class="type-btn" data-it="text" onclick="selIT(this,'text')">💬 Text</button>
+        <button class="type-btn" data-it="note" onclick="selIT(this,'note')">📝 Note</button>
+      </div>
+    </div>
+    <div class="fg"><label class="fl">Date</label><input id="i-date" class="fc" type="date"></div>
+    <div class="fg"><label class="fl">Summary</label><textarea id="i-sum" class="fc fc-ta" placeholder="What did you discuss? Key details, context, what you learned..."></textarea></div>
+    <div class="fg"><label class="fl">Commitments / follow-ups (one per line)</label><textarea id="i-com" class="fc" style="min-height:54px" placeholder="e.g. Reach out in March about internship openings"></textarea></div>
+    <div class="m-ft">
+      <button class="btn" onclick="closeM()">Cancel</button>
+      <button class="btn btn-p" onclick="saveI()"><i class="ti ti-check"></i> Log it</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reminder modal -->
+<div id="m-rem" hidden class="m-ov">
+  <div class="modal">
+    <div class="m-hd"><span class="m-title">Set reminder</span><button class="btn-icon" onclick="closeM()"><i class="ti ti-x"></i></button></div>
+    <div class="fg"><label class="fl">Date</label><input id="r-date" class="fc" type="date"></div>
+    <div class="fg"><label class="fl">What do you want to do?</label><textarea id="r-note" class="fc fc-ta" placeholder="e.g. Follow up on internship openings, check in about the deal"></textarea></div>
+    <div class="m-ft">
+      <button class="btn" onclick="closeM()">Cancel</button>
+      <button class="btn btn-p" onclick="saveR()"><i class="ti ti-check"></i> Set reminder</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+const S={view:'dash',contacts:[],sel:null,tab:'ov',aiMsgs:[],aiLoad:false,filterT:0,filterQ:'',editId:null,selTier:2,selIT:'meeting',loading:true,apiKey:localStorage.getItem('ros_apikey')||''};
+
+// ── Utils ──────────────────────────────────────────────────────────────────
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2);
+const ini=n=>n.split(' ').map(p=>p[0]||'').join('').toUpperCase().slice(0,2);
+const fmtD=d=>{if(!d)return '—';return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})};
+const fmtDS=d=>new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+const dAgo=d=>{if(!d)return null;return Math.floor((Date.now()-new Date(d).getTime())/86400000)};
+const tLabel=['','🌟 Inner circle','👥 Active','📋 Dormant'];
+const tClass=['','t1','t2','t3'];
+const daysSince=c=>c.lastInteraction?dAgo(c.lastInteraction):dAgo(c.createdAt)||999;
+const shouldRC=c=>{const d=daysSince(c);return(c.tier===1&&d>28)||(c.tier===2&&d>90)||(c.tier===3&&d>180)};
+const upRem=()=>{const today=new Date();today.setHours(0,0,0,0);const soon=new Date(today);soon.setDate(today.getDate()+14);const arr=[];S.contacts.forEach(c=>(c.reminders||[]).forEach(r=>{if(!r.done&&new Date(r.date)<=soon)arr.push({...r,cid:c.id,cn:c.name})}));return arr.sort((a,b)=>new Date(a.date)-new Date(b.date))};
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+
+// ── DB / persistence ───────────────────────────────────────────────────────
+function init(){loadContacts();S.loading=false;render()}
+
+function loadContacts(){
+  const d=localStorage.getItem('ros_v1');
+  S.contacts=d?JSON.parse(d):[]
+}
+
+function persist(c){
+  const idx=S.contacts.findIndex(x=>x.id===c.id);
+  if(idx>=0)S.contacts[idx]=c;else S.contacts.push(c);
+  localStorage.setItem('ros_v1',JSON.stringify(S.contacts))
+}
+
+function del(id){
+  S.contacts=S.contacts.filter(c=>c.id!==id);
+  localStorage.setItem('ros_v1',JSON.stringify(S.contacts))
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function render(){
+  const main=document.getElementById('main');
+  // sidebar stats
+  const dueNow=S.contacts.reduce((n,c)=>n+(c.reminders||[]).filter(r=>!r.done&&new Date(r.date)<=new Date()).length,0);
+  document.getElementById('s-tot').textContent=S.contacts.length;
+  document.getElementById('s-t1').textContent=S.contacts.filter(c=>c.tier===1).length;
+  document.getElementById('s-rem').textContent=dueNow;
+  // nav
+  document.querySelectorAll('.nav-i').forEach(el=>el.classList.toggle('on',el.dataset.v===S.view));
+  if(S.loading){main.innerHTML=`<div class="empty-s" style="padding-top:80px"><i class="ti ti-loader spin"></i><p style="margin-top:12px">Loading your network...</p></div>`;return}
+  const views={dash:vDash,contacts:vContacts,'contact-detail':vDetail,ai:vAI};
+  main.innerHTML=(views[S.view]||vDash)();
+  bindEvents()
+}
+
+function vDash(){
+  const rc=S.contacts.filter(shouldRC).sort((a,b)=>daysSince(b)-daysSince(a)).slice(0,6);
+  const rems=upRem().slice(0,5);
+  const t1=S.contacts.filter(c=>c.tier===1).length,t2=S.contacts.filter(c=>c.tier===2).length;
+  return`<div class="topbar"><div><h1>Dashboard</h1><p>Your relationship intelligence overview</p></div><div class="topbar-r"><button class="btn btn-p btn-sm" onclick="openAddC()"><i class="ti ti-plus" aria-hidden="true"></i> Add contact</button></div></div>
+  <div class="content">
+  <div class="stats-row">
+    <div class="stat-c"><div class="stat-n">${S.contacts.length}</div><div class="stat-l">Total contacts</div></div>
+    <div class="stat-c"><div class="stat-n">${t1}</div><div class="stat-l">Inner circle</div></div>
+    <div class="stat-c"><div class="stat-n">${t2}</div><div class="stat-l">Active network</div></div>
+    <div class="stat-c"><div class="stat-n">${rc.length}</div><div class="stat-l">Reconnect soon</div></div>
+  </div>
+  ${S.contacts.length===0?`<div class="card" style="text-align:center;padding:36px"><i class="ti ti-users" style="font-size:40px;color:var(--text-muted);display:block;margin-bottom:12px" aria-hidden="true"></i><p style="font-weight:500;margin-bottom:6px">Start building your graph</p><p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px">Add your first contact to get started</p><button class="btn btn-p" onclick="openAddC()"><i class="ti ti-plus"></i> Add your first contact</button></div>`:`
+  <div class="two-col">
+    <div class="card"><div class="card-t">Reconnect soon</div>${rc.length===0?'<p style="font-size:13px;color:var(--text-muted)">All relationships are current 🎉</p>':rc.map(c=>`<div class="rc-row" onclick="viewC('${c.id}')"><div><div class="rc-name">${esc(c.name)}</div><div class="rc-sub">${esc(c.role||'')}${c.company?' · '+esc(c.company):''}</div></div><span class="t-badge ${tClass[c.tier]}" style="white-space:nowrap">${tLabel[c.tier]}</span><span class="rc-days">${daysSince(c)}d</span></div>`).join('')}</div>
+    <div class="card"><div class="card-t">Upcoming reminders</div>${rems.length===0?'<p style="font-size:13px;color:var(--text-muted)">No reminders in the next 2 weeks</p>':rems.map(r=>{const ov=new Date(r.date)<new Date();return`<div class="rc-row" onclick="viewC('${r.cid}')"><div><div class="rc-name">${esc(r.cn)}</div><div class="rc-sub" style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.note)}</div></div><span class="rem-date ${ov?'ov':''}">${fmtDS(r.date)}</span></div>`}).join('')}</div>
+  </div>`}
+  </div>`
+}
+
+function vContacts(){
+  let list=S.contacts;
+  if(S.filterT>0)list=list.filter(c=>c.tier===S.filterT);
+  if(S.filterQ){const q=S.filterQ.toLowerCase();list=list.filter(c=>c.name.toLowerCase().includes(q)||(c.company||'').toLowerCase().includes(q)||(c.role||'').toLowerCase().includes(q)||(c.tags||[]).some(t=>t.toLowerCase().includes(q)))}
+  return`<div class="topbar"><div><h1>Contacts</h1><p>${S.contacts.length} in your network</p></div><div class="topbar-r"><button class="btn btn-p btn-sm" onclick="openAddC()"><i class="ti ti-plus" aria-hidden="true"></i> Add contact</button></div></div>
+  <div class="content">
+  <div class="search-row">
+    <input class="s-input" placeholder="Search name, company, role, tag..." value="${esc(S.filterQ)}" oninput="S.filterQ=this.value;render()">
+    ${[0,1,2,3].map(t=>`<button class="f-chip${S.filterT===t?' on':''}" onclick="S.filterT=${t};render()">${t===0?'All':tLabel[t]}</button>`).join('')}
+  </div>
+  ${list.length===0?`<div class="empty-s"><i class="ti ti-search"></i><h3>No contacts found</h3><p>${S.filterQ?`No results for "${esc(S.filterQ)}"`:''}</p>${!S.filterQ?`<button class="btn btn-p" onclick="openAddC()"><i class="ti ti-plus"></i> Add contact</button>`:''}</div>`:`
+  <div class="c-grid">${list.map(c=>{const d=daysSince(c);return`<div class="c-card" onclick="viewC('${c.id}')"><div class="c-top"><div style="display:flex;align-items:center;gap:10px"><div class="av" style="width:38px;height:38px;font-size:13px">${ini(c.name)}</div><div><div class="c-name">${esc(c.name)}</div><div class="c-role">${esc(c.role||'')}${c.company?' · '+esc(c.company):''}</div></div></div><span class="t-badge ${tClass[c.tier]}">${tLabel[c.tier]}</span></div>${(c.tags||[]).length>0?`<div style="margin-top:8px">${c.tags.slice(0,3).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>`:''}<div class="c-foot"><span class="last-s">${d===0?'Today':d===999?'No log yet':d+'d ago'}</span>${shouldRC(c)?'<span style="font-size:11px;color:var(--text-warning,#b45309)">⚡ Reconnect</span>':''}</div></div>`}).join('')}</div>`}
+  </div>`
+}
+
+function vDetail(){
+  const c=S.contacts.find(x=>x.id===S.sel);
+  if(!c)return vContacts();
+  const ints=(c.interactions||[]).slice().reverse();
+  const rems=(c.reminders||[]).filter(r=>!r.done);
+  let tab='';
+  if(S.tab==='ov'){
+    tab=`${c.bio?`<div class="card"><div class="card-t">Notes</div><p style="font-size:13px;line-height:1.75;color:var(--text-primary)">${esc(c.bio).replace(/\n/g,'<br>')}</p></div>`:''}
+    <div class="card"><div class="card-t">Contact info</div>
+    ${c.email?`<div class="inf-row"><i class="ti ti-mail" aria-hidden="true"></i> ${esc(c.email)}</div>`:''}
+    ${c.phone?`<div class="inf-row"><i class="ti ti-phone" aria-hidden="true"></i> ${esc(c.phone)}</div>`:''}
+    ${c.company?`<div class="inf-row"><i class="ti ti-building" aria-hidden="true"></i> ${esc(c.company)}</div>`:''}
+    ${c.role?`<div class="inf-row"><i class="ti ti-briefcase" aria-hidden="true"></i> ${esc(c.role)}</div>`:''}
+    ${!c.email&&!c.phone&&!c.company&&!c.role?'<p style="font-size:13px;color:var(--text-muted)">No contact info added yet.</p>':''}
+    </div>
+    ${(c.tags||[]).length>0?`<div class="card"><div class="card-t">Tags</div>${c.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>`:''}`;
+  }else if(S.tab==='int'){
+    const iIcons={meeting:'ti-coffee',call:'ti-phone',email:'ti-mail',text:'ti-message',note:'ti-notes'};
+    tab=`<button class="btn btn-sm" style="margin-bottom:14px" onclick="openInt('${c.id}')"><i class="ti ti-plus" aria-hidden="true"></i> Log interaction</button>
+    ${ints.length===0?'<p style="font-size:13px;color:var(--text-muted)">No interactions logged yet.</p>':ints.map(i=>{const cs=(i.commits||[]).filter(Boolean);return`<div class="tl-item"><div class="tl-icon"><i class="ti ${iIcons[i.type]||'ti-circle'}" aria-hidden="true"></i></div><div class="tl-body"><div class="tl-date">${fmtD(i.date)} · ${i.type}</div><div class="tl-sum">${esc(i.summary).replace(/\n/g,'<br>')}</div>${cs.map(x=>`<span class="commit-tag"><i class="ti ti-clock" aria-hidden="true"></i> ${esc(x)}</span>`).join('')}</div></div>`}).join('')}`;
+  }else if(S.tab==='rem'){
+    tab=`<button class="btn btn-sm" style="margin-bottom:14px" onclick="openRem('${c.id}')"><i class="ti ti-bell" aria-hidden="true"></i> Set reminder</button>
+    ${rems.length===0?'<p style="font-size:13px;color:var(--text-muted)">No active reminders.</p>':rems.map(r=>{const ov=new Date(r.date)<new Date();return`<div class="rem-row"><button class="rem-cb" aria-label="Mark done" onclick="markDone('${c.id}','${r.id}')"></button><div><div class="rem-date ${ov?'ov':''}">${ov?'⚠️ Overdue — ':''}${fmtD(r.date)}</div><div class="rem-note">${esc(r.note)}</div></div></div>`}).join('')}`;
+  }
+  const d=daysSince(c);
+  return`<div class="topbar"><div><button class="back-btn" onclick="S.view='contacts';render()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Contacts</button></div><div class="topbar-r"><button class="btn btn-sm" onclick="openEditC('${c.id}')"><i class="ti ti-edit" aria-hidden="true"></i> Edit</button><button class="btn btn-sm btn-d" onclick="doDelete('${c.id}')"><i class="ti ti-trash" aria-hidden="true"></i></button></div></div>
+  <div class="content">
+  <div class="d-hd"><div class="av" style="width:54px;height:54px;font-size:20px">${ini(c.name)}</div><div><div class="d-name">${esc(c.name)}</div><div class="d-sub">${esc(c.role||'')}${c.company?' · '+esc(c.company):''}</div><div style="margin-top:8px;display:flex;align-items:center;gap:8px"><span class="t-badge ${tClass[c.tier]}">${tLabel[c.tier]}</span><span style="font-size:12px;color:var(--text-muted)">${d===0?'Last contact today':d===999?'No interactions logged':d+'d since last contact'}</span></div></div></div>
+  <div class="tabs">
+    ${['ov','int','rem'].map((t,_,__)=>{const l=['Overview','Interactions ('+((c.interactions||[]).length)+')','Reminders ('+(c.reminders||[]).filter(r=>!r.done).length+')'][['ov','int','rem'].indexOf(t)];return`<div class="tab${S.tab===t?' on':''}" onclick="S.tab='${t}';render()">${l}</div>`}).join('')}
+  </div>
+  ${tab}
+  </div>`
+}
+
+function vAI(){
+  const msgs=S.aiMsgs;
+  return`<div class="topbar"><div><h1>AI assistant</h1><p>Ask anything about your network — powered by Claude</p></div><div class="topbar-r"><button class="btn-gh btn-sm" onclick="S.aiMsgs=[];render()"><i class="ti ti-refresh" aria-hidden="true"></i> Clear</button><button class="btn-gh btn-sm" onclick="openSettings()"><i class="ti ti-key" aria-hidden="true"></i> API key</button></div></div>
+  <div class="content" style="display:flex;flex-direction:column;height:calc(100vh - 125px)">
+  ${!S.apiKey?`<div class="alert-info" style="display:flex;align-items:flex-start;gap:10px"><i class="ti ti-info-circle" style="font-size:18px;flex-shrink:0;margin-top:1px" aria-hidden="true"></i><div><strong style="display:block;margin-bottom:3px">Set up your API key to use AI</strong>Click <strong>API key</strong> above, paste your key from <a href="https://console.anthropic.com" target="_blank" style="color:var(--brand)">console.anthropic.com</a>, and AI will work right here. Your key is stored only in this browser — never sent anywhere except Anthropic.<br><br>Or use the <a href="https://claude.ai/artifact/Mm6zFcvmrgSjhHoSkswM4d" target="_blank" style="color:var(--brand)">hosted version on Claude.ai</a> which includes AI with no setup.</div></div>`:''}
+  <div class="q-chips">
+    <button class="q-chip" onclick="askAI('Who should I reconnect with this week based on my tier system?')">Who to reconnect with?</button>
+    <button class="q-chip" onclick="askAI('Who in my network works in venture capital or private equity?')">Who works in VC/PE?</button>
+    <button class="q-chip" onclick="askAI('What upcoming commitments or follow-ups do I have logged?')">My commitments</button>
+    <button class="q-chip" onclick="askAI('Draft a short reconnect message I could send to the most overdue Tier 1 contact')">Draft reconnect</button>
+    <button class="q-chip" onclick="askAI('Who do I know who could help with Singapore finance connections?')">Singapore connections</button>
+  </div>
+  <div class="ai-msgs" id="ai-msgs">
+    ${msgs.length===0?`<div style="text-align:center;padding:40px 20px;color:var(--text-muted)"><i class="ti ti-sparkles" style="font-size:32px;display:block;margin-bottom:10px" aria-hidden="true"></i><p style="font-size:13px">Ask anything about your network. Set your API key above to enable AI.</p></div>`:msgs.map(m=>`<div class="ai-m ${m.r}"><div class="ai-b">${esc(m.c).replace(/\n/g,'<br>')}</div></div>`).join('')}
+    ${S.aiLoad?`<div class="ai-m a"><div class="ai-b"><div class="dots"><span></span><span></span><span></span></div></div></div>`:''}
+  </div>
+  <div class="ai-input-row">
+    <input class="ai-in" id="ai-in" placeholder="Ask about your network..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitAI()}">
+    <button class="btn btn-p" onclick="submitAI()" ${S.aiLoad?'disabled':''}><i class="ti ti-send" aria-hidden="true"></i></button>
+  </div>
+  </div>`
+}
+
+function bindEvents(){
+  document.querySelectorAll('.nav-i').forEach(el=>el.onclick=()=>{S.view=el.dataset.v;render()});
+  const am=document.getElementById('ai-msgs');
+  if(am)am.scrollTop=am.scrollHeight;
+}
+
+// ── Contact CRUD ───────────────────────────────────────────────────────────
+function openAddC(){S.editId=null;S.selTier=2;document.getElementById('m-ct-title').textContent='Add contact';['name','email','company','role','phone','tags','bio'].forEach(f=>document.getElementById('f-'+f).value='');document.getElementById('m-err').hidden=true;updTUI();document.getElementById('m-contact').hidden=false}
+function openEditC(id){const c=S.contacts.find(x=>x.id===id);if(!c)return;S.editId=id;S.selTier=c.tier;document.getElementById('m-ct-title').textContent='Edit contact';document.getElementById('f-name').value=c.name;document.getElementById('f-email').value=c.email||'';document.getElementById('f-company').value=c.company||'';document.getElementById('f-role').value=c.role||'';document.getElementById('f-phone').value=c.phone||'';document.getElementById('f-tags').value=(c.tags||[]).join(', ');document.getElementById('f-bio').value=c.bio||'';document.getElementById('m-err').hidden=true;updTUI();document.getElementById('m-contact').hidden=false}
+function selT(t){S.selTier=t;updTUI()}
+function updTUI(){document.querySelectorAll('.t-opt').forEach(el=>{const t=parseInt(el.dataset.t);el.className='t-opt'+(S.selTier===t?' s'+t:'')})}
+function saveC(){
+  const name=document.getElementById('f-name').value.trim();
+  if(!name){const e=document.getElementById('m-err');e.textContent='Name is required.';e.hidden=false;return}
+  const tags=document.getElementById('f-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const now=new Date().toISOString();
+  let c;
+  if(S.editId){
+    c={...S.contacts.find(x=>x.id===S.editId),name,email:document.getElementById('f-email').value.trim(),company:document.getElementById('f-company').value.trim(),role:document.getElementById('f-role').value.trim(),phone:document.getElementById('f-phone').value.trim(),tags,bio:document.getElementById('f-bio').value.trim(),tier:S.selTier,updatedAt:now};
+  }else{
+    c={id:uid(),name,email:document.getElementById('f-email').value.trim(),company:document.getElementById('f-company').value.trim(),role:document.getElementById('f-role').value.trim(),phone:document.getElementById('f-phone').value.trim(),tags,bio:document.getElementById('f-bio').value.trim(),tier:S.selTier,createdAt:now,updatedAt:now,lastInteraction:null,interactions:[],reminders:[]};
+  }
+  persist(c);closeM();render()
+}
+function doDelete(id){const c=S.contacts.find(x=>x.id===id);if(!c||!confirm('Delete '+c.name+'? This cannot be undone.'))return;del(id);S.view='contacts';S.sel=null;render()}
+function viewC(id){S.sel=id;S.view='contact-detail';S.tab='ov';render()}
+
+// ── Interactions ───────────────────────────────────────────────────────────
+function openInt(cid){S.sel=cid;S.selIT='meeting';document.getElementById('i-date').value=new Date().toISOString().split('T')[0];document.getElementById('i-sum').value='';document.getElementById('i-com').value='';document.querySelectorAll('.type-btn').forEach(b=>b.classList.toggle('on',b.dataset.it==='meeting'));document.getElementById('m-int').hidden=false}
+function selIT(el,t){S.selIT=t;document.querySelectorAll('.type-btn').forEach(b=>b.classList.toggle('on',b===el))}
+function saveI(){const sum=document.getElementById('i-sum').value.trim();if(!sum)return;const commits=document.getElementById('i-com').value.split('\n').map(s=>s.trim()).filter(Boolean);const date=document.getElementById('i-date').value;const c={...S.contacts.find(x=>x.id===S.sel)};c.interactions=[...(c.interactions||[]),{id:uid(),type:S.selIT,date,summary:sum,commits}];c.lastInteraction=date;c.updatedAt=new Date().toISOString();persist(c);closeM();render()}
+
+// ── Reminders ──────────────────────────────────────────────────────────────
+function openRem(cid){S.sel=cid;const d=new Date();d.setDate(d.getDate()+14);document.getElementById('r-date').value=d.toISOString().split('T')[0];document.getElementById('r-note').value='';document.getElementById('m-rem').hidden=false}
+function saveR(){const date=document.getElementById('r-date').value;const note=document.getElementById('r-note').value.trim();if(!date||!note)return;const c={...S.contacts.find(x=>x.id===S.sel)};c.reminders=[...(c.reminders||[]),{id:uid(),date,note,done:false,createdAt:new Date().toISOString()}];c.updatedAt=new Date().toISOString();persist(c);closeM();render()}
+function markDone(cid,rid){const c={...S.contacts.find(x=>x.id===cid)};c.reminders=(c.reminders||[]).map(r=>r.id===rid?{...r,done:true}:r);c.updatedAt=new Date().toISOString();persist(c);render()}
+function closeM(){['m-contact','m-int','m-rem','m-settings'].forEach(id=>document.getElementById(id).hidden=true)}
+
+// ── AI ─────────────────────────────────────────────────────────────────────
+function submitAI(){const el=document.getElementById('ai-in');if(!el)return;const q=el.value.trim();if(q){el.value='';askAI(q)}}
+
+async function askAI(question){
+  if(S.aiLoad)return;
+  if(!S.apiKey){openSettings();return}
+  S.aiMsgs.push({r:'u',c:question});S.aiLoad=true;render();
+  const el=document.getElementById('ai-in');if(el)el.value='';
+  const ctx=S.contacts.map(c=>({name:c.name,role:c.role||'',company:c.company||'',tier:tLabel[c.tier],tags:c.tags||[],notes:c.bio||'',daysSinceLast:daysSince(c),shouldReconnect:shouldRC(c),recentInteractions:(c.interactions||[]).slice(-4).map(i=>({date:i.date,type:i.type,summary:i.summary,commits:i.commits||[]})),activeReminders:(c.reminders||[]).filter(r=>!r.done).map(r=>({date:r.date,note:r.note}))}));
+  const today=new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+  const sysCtx='You are the AI assistant for RelationshipOS, Chase Wong personal relationship manager. Chase: UCLA Math/Econ student, VC intern at Passion VC Singapore, co-founder of Summertunities, building toward PE/private credit. Today: '+today+'. Network ('+S.contacts.length+' contacts): '+JSON.stringify(ctx)+'. Be specific, practical, concise. Use actual contact names.';
+  const hist=S.aiMsgs.slice(0,-1);
+  var turns=[];
+  if(hist.length===0){turns=[{role:'user',content:sysCtx+'\n\nUser: '+question}];}
+  else{turns=[{role:'user',content:sysCtx+'\n\nUser: '+hist[0].c}];for(var i=1;i<hist.length;i++){turns.push({role:hist[i].r==='u'?'user':'assistant',content:hist[i].c})}turns.push({role:'user',content:question});}
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':S.apiKey,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1024,messages:turns})});
+    if(!res.ok){const err=await res.json().catch(()=>({}));throw new Error(err.error&&err.error.message?err.error.message:'HTTP '+res.status)}
+    const data=await res.json();
+    const txt=(data.content&&data.content.find(function(b){return b.type==='text'}))||{text:'No response.'};
+    S.aiMsgs.push({r:'a',c:txt.text});
+  }catch(e){
+    var msg=e.message||'Unknown error';
+    if(msg.toLowerCase().includes('cors')||msg.toLowerCase().includes('failed to fetch')||msg.toLowerCase().includes('network')){
+      msg='CORS error — Anthropic blocks direct browser API calls on custom domains.\n\nUse the hosted version instead: https://claude.ai/artifact/Mm6zFcvmrgSjhHoSkswM4d\n\nOr deploy with Vercel (free) to get a working AI backend.';
+    }
+    S.aiMsgs.push({r:'a',c:'AI error: '+msg});
+  }
+  S.aiLoad=false;render()
+}
+
+
+// ── Settings ──────────────────────────────────────────────────────────────
+function openSettings(){
+  document.getElementById('s-apikey').value=S.apiKey||'';
+  document.getElementById('m-settings').hidden=false;
+}
+function saveAPIKey(){
+  const k=document.getElementById('s-apikey').value.trim();
+  if(k){S.apiKey=k;localStorage.setItem('ros_apikey',k);}
+  closeM();render();
+}
+function clearAPIKey(){
+  S.apiKey='';localStorage.removeItem('ros_apikey');closeM();render();
+}
+
+// ── Boot ───────────────────────────────────────────────────────────────────
+init();
+</script>
+
+<!-- Settings modal -->
+<div id="m-settings" hidden class="m-ov">
+  <div class="modal" style="max-width:440px">
+    <div class="m-hd"><span class="m-title">AI settings</span><button class="btn-icon" onclick="closeM()"><i class="ti ti-x"></i></button></div>
+    <div class="fg">
+      <label class="fl">Anthropic API key</label>
+      <input id="s-apikey" class="fc" type="password" placeholder="sk-ant-..." style="font-family:monospace">
+      <p style="font-size:12px;color:var(--text-secondary);margin-top:6px">Your key is stored only in this browser (localStorage) and sent directly to Anthropic. Get one free at <a href="https://console.anthropic.com" target="_blank" style="color:var(--brand)">console.anthropic.com</a>.</p>
+    </div>
+    <div class="alert-warn" style="font-size:12px">⚠️ Direct browser API calls may be blocked by CORS on some hosting providers. If AI fails, use the <a href="https://claude.ai/artifact/Mm6zFcvmrgSjhHoSkswM4d" target="_blank" style="color:inherit;font-weight:600">Claude.ai hosted version</a> instead.</div>
+    <div class="m-ft">
+      ${S.apiKey?'<button class="btn btn-d btn-sm" onclick="clearAPIKey()">Remove key</button>':''}
+      <button class="btn" onclick="closeM()">Cancel</button>
+      <button class="btn btn-p" onclick="saveAPIKey()"><i class="ti ti-check"></i> Save key</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
